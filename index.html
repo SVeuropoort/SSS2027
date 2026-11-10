@@ -585,7 +585,7 @@ footer{padding-block:40px;color:var(--muted);font-size:.85rem}
 <div class="login" id="login" hidden><form id="loginForm" class="card">
   <h2>Stook, Stoof &amp; Stoom</h2><p>Log in met de teamcode om het gedeelde draaiboek te openen.</p>
   <label for="lgNaam">Wie ben je?<select id="lgNaam"><option>Sebastiaan</option><option>Bart</option><option>Ernst-Jan</option><option>Daphne</option><option>Anouska</option><option>Gast</option></select></label>
-  <label for="lgCode">Teamcode<input id="lgCode" type="password" autocomplete="current-password" required></label>
+  <label for="lgCode">Teamcode<input id="lgCode" type="text" autocapitalize="none" autocorrect="off" spellcheck="false" autocomplete="off" required></label>
   <button class="btn" type="submit">Openen</button><p id="loginMsg" class="err"></p></form></div>
 <dialog class="lb" id="lb" aria-label="Afbeelding groot">
   <div class="inner"><img id="lbImg" alt=""><p id="lbCap"></p><button type="button" class="close" id="lbClose">Sluiten</button></div>
@@ -604,7 +604,7 @@ function diff(a,b){ // wat is er veranderd van a naar b (2 niveaus diep)
   if(!a||typeof a!=="object"||Array.isArray(a)||!b||typeof b!=="object"||Array.isArray(b))return JSON.stringify(a)===JSON.stringify(b)?undefined:b;
   const out={};let any=false;for(const k of Object.keys(b)){const d=diff(a[k],b[k]);if(d!==undefined){out[k]=d;any=true}}return any?out:undefined}
 async function rpc(fn,args){const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/"+fn,{method:"POST",headers:Object.assign({apikey:SUPABASE_KEY,"Content-Type":"application/json"},SUPABASE_KEY.startsWith("eyJ")?{Authorization:"Bearer "+SUPABASE_KEY}:{}),body:JSON.stringify(args)});
-  if(!r.ok){const t=await r.text();throw new Error(/teamcode/i.test(t)?"Onjuiste teamcode":"Opslaan lukt niet ("+r.status+")")}return r.json()}
+  if(!r.ok){const t=await r.text();throw new Error(/teamcode/i.test(t)?"Onjuiste teamcode":"Database niet bereikbaar ("+r.status+"): "+t.slice(0,160))}return r.json()}
 function syncStatus(t,bad){const el=document.getElementById("syncState");if(el){el.textContent=t;el.classList.toggle("bad",!!bad)}}
 const store={
   getItem(k){const r=SHARED[k];if(ONLINE&&r){return r in remote?JSON.stringify(remote[r]):null}return ls.get(k)},
@@ -623,7 +623,7 @@ function loginForm(msg){
   const o=document.getElementById("login");o.hidden=false;document.getElementById("loginMsg").textContent=msg||"";
   try{const a=JSON.parse(ls.get("sss-auth")||"null");if(a){document.getElementById("lgNaam").value=a.naam}}catch(e){}
   return new Promise(res=>{document.getElementById("loginForm").onsubmit=async ev=>{ev.preventDefault();
-    const code=document.getElementById("lgCode").value.trim(),naam=document.getElementById("lgNaam").value;
+    const code=document.getElementById("lgCode").value.trim().toLowerCase(),naam=document.getElementById("lgNaam").value;
     auth={code,naam};try{await pull(true);ls.set("sss-auth",JSON.stringify(auth));o.hidden=true;res()}catch(e){document.getElementById("loginMsg").textContent=e.message}}})}
 async function main(){
   if(!ONLINE){syncStatus("Alleen op dit apparaat");boot();return}
