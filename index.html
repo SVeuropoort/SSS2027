@@ -511,7 +511,7 @@ footer{padding-block:40px;color:var(--muted);font-size:.85rem}
 </section>
 
 <section id="begroting" class="stack" hidden>
-  <div><h2>Begroting</h2><p class="lede">Rekenhulp op basis van de werkbegroting van 2 november 2026. Elk bedrag hieronder is aan te passen; alles rekent direct door, ook de kop bovenaan. Het Sheets-bestand blijft leidend.</p></div>
+  <div><h2>Begroting</h2><p class="lede">Rekenhulp met als nulpunt de begroting van <span id="nulDatum">10 november 2026</span>. Elk bedrag hieronder is aan te passen; alles rekent direct door, ook de kop bovenaan. Het Sheets-bestand blijft leidend.</p></div>
   <div class="calcgroup"><span class="label">Bezetting en prijs</span><div class="calc">
     <label for="bDeel">Deelnemers<input type="number" id="bDeel" min="1" max="60" value="20"></label>
     <label for="bMw">Medewerkers<input type="number" id="bMw" min="0" max="20" value="4"></label>
@@ -550,8 +550,9 @@ footer{padding-block:40px;color:var(--muted);font-size:.85rem}
     <label for="bCtm">Bijdrage C-team per medewerker (€)<input type="number" id="bCtm" min="0" step="0.5" value="17.5"></label>
     <label for="bRes">Reservering onvoorzien (% na afdrachten)<input type="number" id="bRes" min="0" max="50" step="1" value="10"></label>
   </div>
-  <div class="toolbar" style="margin-top:12px"><button class="btn" id="resetB">Begroting terugzetten naar 2 november</button></div>
-  <p id="resetBAsk" class="note" hidden>Alle bedragen in de rekenhulp gaan terug naar de werkbegroting. De boodschappenlijst blijft staan. <button class="btn" id="resetBYes">Ja, terugzetten</button> <button class="btn" id="resetBNo">Annuleren</button></p>
+  <div class="toolbar" style="margin-top:12px"><button class="btn" id="resetB">Terugzetten naar nulpunt (<span id="nulDatum2">10 november 2026</span>)</button><button class="btn" id="setNul">Huidige stand vastzetten als nulpunt</button></div>
+  <p id="setNulAsk" class="note" hidden>De bedragen zoals ze nu staan worden het nieuwe nulpunt voor het hele team. <button class="btn" id="setNulYes">Ja, vastzetten</button> <button class="btn" id="setNulNo">Annuleren</button></p>
+  <p id="resetBAsk" class="note" hidden>Alle bedragen in de rekenhulp gaan terug naar het nulpunt. De boodschappenlijst blijft staan. <button class="btn" id="resetBYes">Ja, terugzetten</button> <button class="btn" id="resetBNo">Annuleren</button></p>
   </div>
   <div class="result" id="result"></div>
   <div class="card"><span class="label">Kosten per deelnemer</span>
@@ -581,7 +582,7 @@ footer{padding-block:40px;color:var(--muted);font-size:.85rem}
 </section>
 
 </main>
-<footer class="wrap">Werkdocument versie 6 · 2 november 2026 · Afvinkstatus en taakverdeling worden alleen in deze browser bewaard.</footer>
+<footer class="wrap">Werkdocument · nulpunt begroting 10 november 2026 · <span id="footStore">Afvinkstatus en taakverdeling worden alleen in deze browser bewaard.</span></footer>
 <div class="toast" id="toast" hidden></div>
 <div class="login" id="login" hidden><form id="loginForm" class="card">
   <h2>Stook, Stoof &amp; Stoom</h2><p>Log in met de teamcode om het gedeelde draaiboek te openen.</p>
@@ -861,7 +862,10 @@ const eur2=v=>(v<0?"−":"")+"€"+Math.abs(v).toLocaleString("nl-NL",{minimumFr
 const BIN=["bDeel","bMw","bNacht","bPrijs","bStaf","bVoed","bDrank","bTerr","bSauna","bKoud","bWork","bHout","bKm","bRit","bAutA","bAut","bVerb","bAanh","bLtr","bReisX","bPromo","bOver","bCal","bLsc","bPt","bCtd","bCtm","bRes"];
 const BDEF={};BIN.forEach(id=>BDEF[id]=$(id).defaultValue);
 try{const sv=JSON.parse(store.getItem(KEY+"-begr")||"{}");if(sv.bDrank==="12")sv.bDrank="3";if(sv.bAut==="1")sv.bAut="0";if(sv.bTerr==="7.5")sv.bTerr="10.25";if(sv.bLsc==="2.75")sv.bLsc="4.25";if(sv.bVoed==="45")sv.bVoed="35";if(sv.bSauna==="400")sv.bSauna="100";if(sv.bWork==="200")sv.bWork="100";BIN.forEach(id=>{if(sv[id]!==undefined)$(id).value=sv[id]})}catch(e){}
-const saveBegr=()=>{try{const o={};BIN.forEach(id=>o[id]=$(id).value);store.setItem(KEY+"-begr",JSON.stringify(o))}catch(e){}};
+let NUL=null;try{const sv0=JSON.parse(store.getItem(KEY+"-begr")||"{}");if(sv0.__nul)NUL=sv0.__nul}catch(e){}
+const showNul=()=>{const d=NUL&&NUL.__datum?NUL.__datum:"10 november 2026";$("nulDatum").textContent=d;$("nulDatum2").textContent=d};showNul();
+if(ONLINE)$("footStore").textContent="Alles wordt gedeeld met het team.";
+const saveBegr=()=>{try{const o={};BIN.forEach(id=>o[id]=$(id).value);if(NUL)o.__nul=NUL;store.setItem(KEY+"-begr",JSON.stringify(o))}catch(e){}};
 function B(){const n=id=>Math.max(0,parseFloat($(id).value)||0);
   const D=Math.max(1,Math.round(n("bDeel"))),staf=Math.round(n("bMw"));
   return{D,staf,eters:D+staf,nacht:Math.max(1,Math.round(n("bNacht"))),n};}
@@ -940,7 +944,10 @@ function calc(){
 document.querySelectorAll(".calc input").forEach(i=>i.addEventListener("input",()=>{saveBegr();if(["bDeel","bMw"].includes(i.id))renderBood();calc()}));
 $("resetB").addEventListener("click",()=>$("resetBAsk").hidden=false);
 $("resetBNo").addEventListener("click",()=>$("resetBAsk").hidden=true);
-$("resetBYes").addEventListener("click",()=>{BIN.forEach(id=>$(id).value=BDEF[id]);saveBegr();$("resetBAsk").hidden=true;renderBood();calc();toast("Begroting teruggezet")});
+$("setNul").addEventListener("click",()=>$("setNulAsk").hidden=false);
+$("setNulNo").addEventListener("click",()=>$("setNulAsk").hidden=true);
+$("setNulYes").addEventListener("click",()=>{const d=new Date().toLocaleDateString("nl-NL",{day:"numeric",month:"long",year:"numeric"});NUL={__datum:d};BIN.forEach(id=>NUL[id]=$(id).value);saveBegr();showNul();$("setNulAsk").hidden=true;toast("Nulpunt vastgezet op "+d)});
+$("resetBYes").addEventListener("click",()=>{BIN.forEach(id=>$(id).value=NUL&&NUL[id]!==undefined?NUL[id]:BDEF[id]);saveBegr();$("resetBAsk").hidden=true;renderBood();calc();toast("Begroting teruggezet")});
 
 // boodschappen: [categorie, product, hoeveelheid (voor 24 eters), eenheid, prijs per eenheid]
 const BCATS=[
@@ -1076,7 +1083,7 @@ renderDays();renderTeam();renderMat();renderBood();calc();renderOpen();route();
 window.__reapply=()=>{
   try{const r=store.getItem(KEY);S={chk:{},own:{},role:{},open:{}};if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
   try{const b=JSON.parse(store.getItem(KEY+"-bood-plus"));if(Array.isArray(b))BOOD=b}catch(e){}
-  try{const sv=JSON.parse(store.getItem(KEY+"-begr")||"{}");BIN.forEach(id=>{if(sv[id]!==undefined&&document.activeElement!==$(id))$(id).value=sv[id]})}catch(e){}
+  try{const sv=JSON.parse(store.getItem(KEY+"-begr")||"{}");if(sv.__nul){NUL=sv.__nul;showNul()}BIN.forEach(id=>{if(sv[id]!==undefined&&document.activeElement!==$(id))$(id).value=sv[id]})}catch(e){}
   try{const m=store.getItem(KEY+"-bmode");if(m)$("bMode").value=ONLINE?JSON.parse(m):m}catch(e){}
   try{const r=store.getItem(KEY+"-pig2");if(r!==null&&PIG.some(p=>p[0]===+JSON.parse(r)))pigG=+JSON.parse(r)}catch(e){}
   if(document.activeElement&&document.activeElement.closest&&document.activeElement.closest("#boodList"))return calc();
