@@ -603,7 +603,7 @@ const ls={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:
 function diff(a,b){ // wat is er veranderd van a naar b (2 niveaus diep)
   if(!a||typeof a!=="object"||Array.isArray(a)||!b||typeof b!=="object"||Array.isArray(b))return JSON.stringify(a)===JSON.stringify(b)?undefined:b;
   const out={};let any=false;for(const k of Object.keys(b)){const d=diff(a[k],b[k]);if(d!==undefined){out[k]=d;any=true}}return any?out:undefined}
-async function rpc(fn,args){const r=await fetch(SUPABASE_URL+"/rest/v1/rpc/"+fn,{method:"POST",headers:Object.assign({apikey:SUPABASE_KEY,"Content-Type":"application/json"},SUPABASE_KEY.startsWith("eyJ")?{Authorization:"Bearer "+SUPABASE_KEY}:{}),body:JSON.stringify(args)});
+async function rpc(fn,args){const ac=new AbortController(),to=setTimeout(()=>ac.abort(),15000);let r;try{r=await fetch(SUPABASE_URL+"/rest/v1/rpc/"+fn,{signal:ac.signal,method:"POST",headers:Object.assign({apikey:SUPABASE_KEY,"Content-Type":"application/json"},SUPABASE_KEY.startsWith("eyJ")?{Authorization:"Bearer "+SUPABASE_KEY}:{}),body:JSON.stringify(args)})}catch(e){clearTimeout(to);throw new Error(e.name==="AbortError"?"Geen antwoord van de database (time-out). Staat het Supabase-project aan?":"Geen verbinding met de database: "+e.message)}clearTimeout(to);
   if(!r.ok){const t=await r.text();throw new Error(/teamcode/i.test(t)?"Onjuiste teamcode":"Database niet bereikbaar ("+r.status+"): "+t.slice(0,160))}return r.json()}
 function syncStatus(t,bad){const el=document.getElementById("syncState");if(el){el.textContent=t;el.classList.toggle("bad",!!bad)}}
 const store={
@@ -624,7 +624,8 @@ function loginForm(msg){
   try{const a=JSON.parse(ls.get("sss-auth")||"null");if(a){document.getElementById("lgNaam").value=a.naam}}catch(e){}
   return new Promise(res=>{document.getElementById("loginForm").onsubmit=async ev=>{ev.preventDefault();
     const code=document.getElementById("lgCode").value.trim().toLowerCase(),naam=document.getElementById("lgNaam").value;
-    auth={code,naam};try{await pull(true);ls.set("sss-auth",JSON.stringify(auth));o.hidden=true;res()}catch(e){document.getElementById("loginMsg").textContent=e.message}}})}
+    const btn=ev.target.querySelector("button"),msg=document.getElementById("loginMsg");btn.disabled=true;btn.textContent="Bezig met openen…";msg.textContent="";
+    auth={code,naam};try{await pull(true);ls.set("sss-auth",JSON.stringify(auth));o.hidden=true;res()}catch(e){msg.textContent=e.message||String(e)}finally{btn.disabled=false;btn.textContent="Openen"}}})}
 async function main(){
   if(!ONLINE){syncStatus("Alleen op dit apparaat");boot();return}
   try{auth=JSON.parse(ls.get("sss-auth")||"null")}catch(e){}
@@ -634,6 +635,8 @@ async function main(){
   setInterval(async()=>{if(pending||document.hidden)return;try{const r=await pull(false);if(r.changed){window.__reapply();syncStatus("Gedeeld · bijgewerkt door "+(r.who||"team")+" om "+new Date().toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit"}))}}catch(e){syncStatus("Geen verbinding met de database",true)}},15000);
   document.getElementById("logout").hidden=false;
   document.getElementById("logout").onclick=()=>{try{localStorage.removeItem("sss-auth")}catch(e){}location.reload()}}
+window.addEventListener("error",e=>{const m=document.getElementById("loginMsg");if(m)m.textContent="Fout: "+e.message;syncStatus("Fout: "+e.message,true)});
+window.addEventListener("unhandledrejection",e=>{const m=document.getElementById("loginMsg");if(m)m.textContent="Fout: "+(e.reason&&e.reason.message||e.reason);});
 function boot(){
 const TEAM=[
  {n:"Sebastiaan van der Meer",k:"Sebastiaan",r:"Aanspreekpunt",t:"Eerste contact voor deelnemers en organisatie; overzicht en afstemming"},
