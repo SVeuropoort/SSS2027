@@ -560,7 +560,7 @@ footer{padding-block:40px;color:var(--muted);font-size:.85rem}
     </div>
     <div class="dfsplit" id="dfSplit"></div>
     <ol class="dflist" id="dfList"></ol>
-    <p class="dffoot">Rood: bij ons duurder of minder inkomsten. Groen: bij ons goedkoper. Volledige vergelijking onderaan deze pagina. Kernteam = financieel formulier HIT 2027 van 10 november, maximale begroting.</p>
+    <p class="dffoot">Rood: bij ons duurder of minder inkomsten. Groen: bij ons goedkoper. Volledige vergelijking onderaan deze pagina. Kernteam = financieel formulier HIT 2027, maximale begroting, met de correcties van 11 november.</p>
   </div>
   <div class="calcgroup"><span class="label">Bezetting en prijs</span><div class="calc">
     <label for="bDeel">Deelnemers<input type="number" id="bDeel" min="1" max="60" value="20"></label>
@@ -572,13 +572,13 @@ footer{padding-block:40px;color:var(--muted);font-size:.85rem}
   <div class="calcgroup"><span class="label">Per persoon</span><div class="calc">
     <label for="bVoed">Voeding p.p. excl. speenvarken (€)<input type="number" id="bVoed" min="0" step="any" value="35"><small id="hVoed"></small></label>
     <label for="bDrank">Dranken p.p. (€)<input type="number" id="bDrank" min="0" step="any" value="3"><small id="hDrank"></small></label>
-    <label for="bTerr">Terrein p.p. per nacht (€)<input type="number" id="bTerr" min="0" step="0.05" value="10.25"></label>
+    <label for="bTerr">Terrein per deelnemer per nacht (€)<input type="number" id="bTerr" min="0" step="0.05" value="10.25"></label>
   </div></div>
   <div class="calcgroup"><span class="label">Vaste kosten</span><div class="calc">
     <label for="bSauna">Saunahut (€)<input type="number" id="bSauna" min="0" step="25" value="100"></label>
     <label for="bKoud">Koudwaterbak (€)<input type="number" id="bKoud" min="0" step="25" value="0"></label>
     <label for="bWork">Overig materiaal: keukengereedschap en workshops (€)<input type="number" id="bWork" min="0" step="25" value="100"></label>
-    <label for="bHout">Stookhout en gas (€)<input type="number" id="bHout" min="0" step="25" value="200"></label>
+    <label for="bHout">Gas en extra stookhout (€)<input type="number" id="bHout" min="0" step="10" value="50"><small>Basis-stookhout zit in de C-team-bijdrage</small></label>
     <label for="bPromo">Promotie (€)<input type="number" id="bPromo" min="0" step="10" value="80"></label>
     <label for="bOver">Overige kosten (€)<input type="number" id="bOver" min="0" step="10" value="0"></label>
   </div></div>
@@ -592,13 +592,13 @@ footer{padding-block:40px;color:var(--muted);font-size:.85rem}
     <label for="bLtr">Brandstofprijs per liter (€)<input type="number" id="bLtr" min="0" step="0.01" value="2.17"><small>Prijs uit de ANWB-route</small></label>
     <label for="bReisX">Overige reiskosten, parkeren, tol (€)<input type="number" id="bReisX" min="0" step="5" value="0"></label>
   </div><p id="hReis" class="lede" style="font-size:.9rem;margin-top:6px"></p></div>
-  <div class="calcgroup"><span class="label">Vaste afdrachten HIT (tarieven begroting 2026, per persoon per nacht-blok)</span><div class="calc">
-    <label for="bCal">Calamiteitenfonds per deelnemer (€)<input type="number" id="bCal" min="0" step="0.05" value="0.5"></label>
-    <label for="bLsc">Bijdrage LSC per deelnemer (€)<input type="number" id="bLsc" min="0" step="0.05" value="4.25"></label>
+  <div class="calcgroup"><span class="label">Vaste afdrachten HIT (tarieven 2027 volgens Anouska, × 2 bij 2+ nachten)</span><div class="calc">
+    <label for="bCal">Calamiteitenfonds (% van deelnemersgeld)<input type="number" id="bCal" min="0" max="20" step="0.5" value="3"></label>
+    <label for="bLsc">Bijdrage LSC per deelnemer (€)<input type="number" id="bLsc" min="0" step="0.05" value="4"></label>
     <label for="bPt">Bijdrage PT per deelnemer (€)<input type="number" id="bPt" min="0" step="0.05" value="1"></label>
-    <label for="bCtd">Bijdrage C-team per deelnemer (€)<input type="number" id="bCtd" min="0" step="0.5" value="11"></label>
+    <label for="bCtd">Bijdrage C-team per deelnemer (€)<input type="number" id="bCtd" min="0" step="0.5" value="6.5"><small>Voorlopig; hangt af van het stookhout</small></label>
     <label for="bCtm">Bijdrage C-team per medewerker (€)<input type="number" id="bCtm" min="0" step="0.5" value="17.5"></label>
-    <label for="bRes">Reservering onvoorzien (% na afdrachten)<input type="number" id="bRes" min="0" max="50" step="1" value="10"></label>
+    <label for="bRes">Extra reservering (%)<input type="number" id="bRes" min="0" max="50" step="1" value="0"><small>Vervalt in 2027: vervangen door 3% calamiteitenfonds</small></label>
   </div>
   <div class="toolbar" style="margin-top:12px"><button class="btn" id="resetB">Terugzetten naar nulpunt (<span id="nulDatum2">10 november 2026</span>)</button><button class="btn" id="setNul">Huidige stand vastzetten als nulpunt</button></div>
   <p id="setNulAsk" class="note" hidden>De bedragen zoals ze nu staan worden het nieuwe nulpunt voor het hele team. <button class="btn" id="setNulYes">Ja, vastzetten</button> <button class="btn" id="setNulNo">Annuleren</button></p>
@@ -624,11 +624,11 @@ footer{padding-block:40px;color:var(--muted);font-size:.85rem}
   <div class="ledger" id="ledger"></div>
   <div class="card" id="ktCard">
     <span class="label">Naast elkaar: begroting kernteam en onze begroting</span>
-    <p style="color:var(--muted);font-size:.9rem">Kernteam: het financieel formulier HIT 2027 uit je Drive (10 november 2026), kolom maximale begroting: 20 deelnemers, 6 medewerkers, €120. Onze kolom rekent live mee met de bedragen hierboven.</p>
+    <p style="color:var(--muted);font-size:.9rem">Kernteam: het financieel formulier HIT 2027 van Anouska (10 november 2026), maximale begroting: 20 deelnemers, 6 medewerkers, €120. Afdrachten × 2 en calamiteitenfonds €72, zoals Anouska op 11 november bevestigde. Onze kolom rekent live mee.</p>
     <div class="cmpwrap"><table class="cmp" id="ktTable"></table></div>
     <div class="note" id="ktNotes"></div>
   </div>
-  <p class="note"><b>Tarieven:</b> terrein €10,25 p.p.p.n. en LSC €4,25 zijn gecorrigeerd door Anouska (HIT-organisatie, 9 november 2026). Overige afdrachten, medewerkersbijdrage €30 en 10% reservering komen uit de HIT-begroting 2026. Anouska rekent de begroting nog na op haar template. Bij 2 of meer nachten tellen de afdrachten dubbel, zoals in dat bestand. <b>Nog bevestigen voor 2027</b> bij de penningmeester van HIT Heerenveen. Koudwaterbak is nog niet geprijsd. Geen privébetalingen om een tekort te verbergen; bonnen bewaren.</p>
+  <p class="note"><b>Tarieven 2027 (Anouska, 11 november 2026):</b> haar financieel formulier 2027 is leidend; de begroting van 2026 is een oude versie. Afdrachten gaan × 2 bij meer dan 1 overnachting. LSC €4, PT €1, C-team deelnemers €6,50 (voorlopig), C-team medewerkers €17,50, calamiteitenfonds 3% van het deelnemersgeld; de 10% reservering vervalt. Terrein alleen voor deelnemers: medewerkers betalen €30 en daarmee is hun terrein verrekend. Basis-stookhout zit in de C-team-bijdrage per deelnemer.</p>
 </section>
 
 <section id="open-punten" class="stack" hidden>
@@ -838,7 +838,7 @@ const MAT=[
   ["Droge rustplek en reservehanddoeken","Naast hut en bak","Warme kleding bereikbaar"],
   ["Toezicht en gebruiksafspraken","Per moment","Geen duik, geen verplichte onderdompeling"]]}];
 
-const OPEN=["Nieuw veldnummer vastleggen","Minimumaantal deelnemers bepalen en apart doorrekenen","Definitieve deelnemersprijs vaststellen (nu gerekend met €120)","Toezicht, EHBO en vervanging binnen het team verdelen","Saunahut: constructie, warmte, materiaal en deskundige begeleiding","Koudwaterbak: bak, water, afvoer, toezicht en kosten","Welk keukengereedschap iedereen maakt en welk materiaal er al is","Speenvarken via Anouska (HIT-organisatie): gewicht navragen en bestellen","Menu en boodschappenhoeveelheden","Deelnemers laten weten dat ze eigen bier en wijn meenemen; afspraken over alcohol rond vuur, gereedschap en saunahut","Tarieven 2027: terrein, afdrachten, medewerkersbijdrage, reservering","Afspraken over voorschotten en declaraties","Vrijdagmaaltijd verzorgd of zelf meenemen","Definitieve vertrektijd maandag","Inschrijflink met openings- en sluitingsdatum","Contactpersoon en publicatiekanaal; uitnodiging verspreiden","Deelnemersbrief met paklijst, aankomst, vertrek en contactgegevens","Speenvarken: levermoment en koeling tot zondag"];
+const OPEN=["Nieuw veldnummer vastleggen","Minimumaantal deelnemers bepalen en apart doorrekenen","Definitieve deelnemersprijs vaststellen (nu gerekend met €120)","Toezicht, EHBO en vervanging binnen het team verdelen","Saunahut: constructie, warmte, materiaal en deskundige begeleiding","Koudwaterbak: bak, water, afvoer, toezicht en kosten","Welk keukengereedschap iedereen maakt en welk materiaal er al is","Speenvarken via Anouska (HIT-organisatie): gewicht navragen en bestellen","Menu en boodschappenhoeveelheden","Deelnemers laten weten dat ze eigen bier en wijn meenemen; afspraken over alcohol rond vuur, gereedschap en saunahut","Tarieven 2027: terrein, afdrachten, medewerkersbijdrage, reservering","Afspraken over voorschotten en declaraties","Vrijdagmaaltijd verzorgd of zelf meenemen","Definitieve vertrektijd maandag","Inschrijflink met openings- en sluitingsdatum","Contactpersoon en publicatiekanaal; uitnodiging verspreiden","Deelnemersbrief met paklijst, aankomst, vertrek en contactgegevens","Speenvarken: levermoment en koeling tot zondag","Aantal kuub stookhout doorgeven aan Anouska (bepaalt de C-team-bijdrage per deelnemer)"];
 
 // opslag
 const KEY="sss2027-v1";let S={chk:{},own:{},role:{},open:{}};
@@ -917,8 +917,9 @@ const cent=v=>Math.round(v*100)/100;
 const eur2=v=>(v<0?"−":"")+"€"+Math.abs(v).toLocaleString("nl-NL",{minimumFractionDigits:2,maximumFractionDigits:2});
 const BIN=["bDeel","bMw","bNacht","bPrijs","bStaf","bVoed","bDrank","bTerr","bSauna","bKoud","bWork","bHout","bKm","bRit","bAutA","bAut","bVerb","bAanh","bLtr","bReisX","bPromo","bOver","bCal","bLsc","bPt","bCtd","bCtm","bRes"];
 const BDEF={};BIN.forEach(id=>BDEF[id]=$(id).defaultValue);
-try{const sv=JSON.parse(store.getItem(KEY+"-begr")||"{}");if(sv.bDrank==="12")sv.bDrank="3";if(sv.bAut==="1")sv.bAut="0";if(sv.bTerr==="7.5")sv.bTerr="10.25";if(sv.bLsc==="2.75")sv.bLsc="4.25";if(sv.bVoed==="45")sv.bVoed="35";if(sv.bSauna==="400")sv.bSauna="100";if(sv.bWork==="200")sv.bWork="100";BIN.forEach(id=>{if(sv[id]!==undefined)$(id).value=sv[id]})}catch(e){}
-let NUL=null;try{const sv0=JSON.parse(store.getItem(KEY+"-begr")||"{}");if(sv0.__nul)NUL=sv0.__nul}catch(e){}
+const MIG27=o=>{if(!o)return o;const m={bLsc:["2.75","4.25"],bCtd:["11"],bRes:["10"],bCal:["0.5"],bHout:["200"]},to={bLsc:"4",bCtd:"6.5",bRes:"0",bCal:"3",bHout:"50"};for(const k in m)if(m[k].includes(String(o[k])))o[k]=to[k];return o};
+try{const sv=MIG27(JSON.parse(store.getItem(KEY+"-begr")||"{}"));if(sv.__nul)MIG27(sv.__nul);if(sv.bDrank==="12")sv.bDrank="3";if(sv.bAut==="1")sv.bAut="0";if(sv.bTerr==="7.5")sv.bTerr="10.25";if(sv.bLsc==="2.75")sv.bLsc="4.25";if(sv.bVoed==="45")sv.bVoed="35";if(sv.bSauna==="400")sv.bSauna="100";if(sv.bWork==="200")sv.bWork="100";BIN.forEach(id=>{if(sv[id]!==undefined)$(id).value=sv[id]})}catch(e){}
+let NUL=null;try{const sv0=JSON.parse(store.getItem(KEY+"-begr")||"{}");if(sv0.__nul)NUL=MIG27(sv0.__nul)}catch(e){}
 const showNul=()=>{const d=NUL&&NUL.__datum?NUL.__datum:"10 november 2026";$("nulDatum").textContent=d;$("nulDatum2").textContent=d};showNul();
 if(ONLINE)$("footStore").textContent="Alles wordt gedeeld met het team.";
 const saveBegr=()=>{try{const o={};BIN.forEach(id=>o[id]=$(id).value);if(NUL)o.__nul=NUL;store.setItem(KEY+"-begr",JSON.stringify(o))}catch(e){}};
@@ -937,10 +938,10 @@ function calc(){
     $("hVerbA").textContent=va.toLocaleString("nl-NL",{maximumFractionDigits:1});
     $("hReis").textContent=`${km.toLocaleString("nl-NL")} km per auto. Zonder aanhanger ${eur2(km/v*L)} per auto, met aanhanger ${eur2(km/va*L)} per auto. Totaal brandstof ${eur2(zonder+met)}.`;
     return cent(zonder+met+n("bReisX"))})(),promo=n("bPromo"),over=n("bOver");
-  const eigen=voed+drank+vast+reis+promo+over,terr=n("bTerr")*nacht*eters,variabel=eigen+terr;
-  const fx=nacht<2?1:2,afdD=fx*D*(n("bCal")+n("bLsc")+n("bPt")+n("bCtd")),afdM=fx*staf*n("bCtm");
+  const eigen=voed+drank+vast+reis+promo+over,terr=n("bTerr")*nacht*D,variabel=eigen+terr;
+  const fx=nacht<2?1:2,cp=n("bCal")/100,cal=cent(cp*D*P),afd0D=fx*D*(n("bLsc")+n("bPt")+n("bCtd")),afdD=afd0D+cal,afdM=fx*staf*n("bCtm"),afdr0=afd0D+afdM;
   const rp=n("bRes")/100,afdr=afdD+afdM,res=cent(Math.max(0,rp*(D*P-afdr))),ink=D*P+staf*M,resu=ink-variabel-afdr-res;
-  const sluit=(variabel+afdr-rp*afdr-staf*M)/((1-rp)*D);
+  const sluit=(variabel+(1-rp)*afdr0-staf*M)/((1-rp)*(1-cp)*D);
   $("result").innerHTML=`
     <div class="card" style="--c:${resu>=0?"var(--ok)":"var(--ember)"}"><span class="label">Resultaat</span><span class="v">${eur(Math.round(resu))}</span><span style="color:var(--muted);font-size:.9rem">${resu>=0?"overschot":"tekort"} bij ${D} deelnemers × ${eur(P)}</span></div>
     <div class="card" style="--c:var(--iron)"><span class="label">Sluitende prijs</span><span class="v">${eur2(sluit)}</span><span style="color:var(--muted);font-size:.9rem">per deelnemer bij deze aantallen</span></div>
@@ -963,14 +964,14 @@ function calc(){
    +R("Promotie",promo)+(over?R("Overige kosten",over):"")
    +R("Totaal vaste kampkosten",kamp,1)
    +H("Terrein")
-   +R(`Terrein ${eur2(n("bTerr"))} × ${nacht} nachten × ${eters} personen`,terr)
+   +R(`Terrein ${eur2(n("bTerr"))} × ${nacht} nachten × ${D} deelnemers (medewerkers via hun €30)`,terr)
    +H("HIT-afdrachten")
-   +R(`Calamiteitenfonds ${fxt}${eur2(n("bCal"))} × ${D} deelnemers`,fx*D*n("bCal"))
+   +R(`Calamiteitenfonds ${n("bCal")}% van ${eur2(D*P)} deelnemersgeld`,cal)
    +R(`Bijdrage LSC ${fxt}${eur2(n("bLsc"))} × ${D} deelnemers`,fx*D*n("bLsc"))
    +R(`Bijdrage PT ${fxt}${eur2(n("bPt"))} × ${D} deelnemers`,fx*D*n("bPt"))
    +R(`Bijdrage C-team deelnemers ${fxt}${eur2(n("bCtd"))} × ${D}`,fx*D*n("bCtd"))
    +R(`Bijdrage C-team medewerkers ${fxt}${eur2(n("bCtm"))} × ${staf}`,afdM)
-   +R(`Reservering ${n("bRes")}% van (deelnemersgeld − afdrachten)`,res)
+   +(res?R(`Extra reservering ${n("bRes")}%`,res):"")
    +R("Totaal HIT-afdrachten en reservering",afdTot,1)
    +R("Totaal kosten",kosten,1)
    +H("Inkomsten")
@@ -979,27 +980,27 @@ function calc(){
    +R("Totaal inkomsten",ink,1)
    +R(resu>=0?"Resultaat: overschot":"Resultaat: tekort",resu,1);
   // vergelijking met de begroting van het kernteam (financieel formulier HIT 2027, max-kolom)
-  const KT={dln:20,mw:6,prijs:120,mwPrijs:30,lsc:80,pt:20,ctm:105,ctd:130,cal:36,res:0,terr:615,voed:600,pig:250,reis:200,promo:80,sauna:100,mat:100,hout:264};
+  const KT={dln:20,mw:6,prijs:120,mwPrijs:30,lsc:160,pt:40,ctm:210,ctd:260,cal:72,res:0,terr:615,voed:600,pig:250,reis:200,promo:80,sauna:100,mat:100,hout:264};
   const ktInk=KT.dln*KT.prijs+KT.mw*KT.mwPrijs,ktAfd=KT.lsc+KT.pt+KT.ctm+KT.ctd+KT.cal+KT.res,ktVar=KT.terr+KT.voed+KT.pig+KT.reis+KT.promo+KT.sauna+KT.mat+KT.hout,ktKost=ktAfd+ktVar;
   const C=(t,a,b,cls,inv)=>{const d=cent(b-a),g=inv?-d:d;return `<tr${cls?` class="${cls}"`:""}><td>${t}</td><td>${eur2(a)}</td><td>${eur2(b)}</td><td class="${Math.abs(d)<0.005?"":(g>0?"up":"down")}">${Math.abs(d)<0.005?"–":(d>0?"+":"")+eur2(d)}</td></tr>`},CS=t=>`<tr class="sec"><td colspan="4">${t}</td></tr>`;
   $("ktTable").innerHTML=`<thead><tr><th>Post</th><th>Kernteam</th><th>Ons</th><th>Verschil</th></tr></thead><tbody>`
    +CS("Inkomsten")+C(`Deelnemers (kernteam ${KT.dln} × €${KT.prijs}, ons ${D} × ${eur2(P)})`,KT.dln*KT.prijs,D*P,"",1)+C(`Medewerkers (kernteam ${KT.mw}, ons ${staf})`,KT.mw*KT.mwPrijs,staf*M,"",1)+C("Totaal inkomsten",ktInk,ink,"tot",1)
-   +CS("HIT-afdrachten")+C("Bijdrage LSC",KT.lsc,fx*D*n("bLsc"))+C("Bijdrage PT",KT.pt,fx*D*n("bPt"))+C("C-team medewerkers",KT.ctm,afdM)+C("C-team deelnemers",KT.ctd,fx*D*n("bCtd"))+C("Calamiteitenfonds",KT.cal,fx*D*n("bCal"))+C("Reservering onvoorzien",KT.res,res)+C("Totaal afdrachten",ktAfd,afdTot,"tot")
+   +CS("HIT-afdrachten")+C("Bijdrage LSC",KT.lsc,fx*D*n("bLsc"))+C("Bijdrage PT",KT.pt,fx*D*n("bPt"))+C("C-team medewerkers",KT.ctm,afdM)+C("C-team deelnemers",KT.ctd,fx*D*n("bCtd"))+C("Calamiteitenfonds (3%)",KT.cal,cal)+C("Reservering onvoorzien",KT.res,res)+C("Totaal afdrachten",ktAfd,afdTot,"tot")
    +CS("Kampkosten")+C("Terrein",KT.terr,terr)+C("Eten en drinken (zonder speenvarken)",KT.voed,eten+drank)+C("Speenvarken",KT.pig,pig)+C("Reiskosten",KT.reis,reis)+C("Promotie",KT.promo,promo)+C("Saunahut"+(n("bKoud")?" en koudwaterbak":""),KT.sauna,n("bSauna")+n("bKoud"))+C("Overig materiaal / workshops",KT.mat,n("bWork"))+C("Stookhout en gas",KT.hout,n("bHout"))+(over?C("Overige kosten",0,over):"")+C("Totaal kampkosten",ktVar,bood+kamp+terr,"tot")
    +C("Totaal kosten",ktKost,kosten,"tot")+C("Resultaat",cent(ktInk-ktKost),resu,"tot",1)+`</tbody>`;
   // grote verschillen, gesorteerd op grootte (positief = slechter voor ons resultaat)
   const fxt2=fx===2?"× 2":"× 1",L=[
-   ["C-team per deelnemer",fx*D*n("bCtd")-KT.ctd,`Ons ${eur2(n("bCtd"))} ${fxt2} × ${D}, kernteam €6,50 × 1 × 20`],
-   ["Reservering onvoorzien",res-KT.res,`Wij rekenen ${n("bRes")}% reservering, het kernteam niets`],
-   ["Terrein",terr-KT.terr,`Wij rekenen ook ${staf} medewerkers mee (${eters} personen), het kernteam alleen 20 deelnemers`],
-   ["Bijdrage LSC",fx*D*n("bLsc")-KT.lsc,`Ons ${eur2(n("bLsc"))} ${fxt2}, kernteam €4,00 × 1`],
-   ["Reiskosten",reis-KT.reis,`Ons berekend met de ANWB (1 auto met aanhanger), kernteam schatting €200`],
-   ["Stookhout en gas",n("bHout")-KT.hout,`Kernteam €50 gas + €214 "Stookhout?" (restpost om op €0 uit te komen)`],
-   ["Eten en drinken",eten+drank-KT.voed,`Ons PLUS-lijst voor ${eters} eters, kernteam €30 × 20 deelnemers`],
-   ["Inkomsten medewerkers",KT.mw*KT.mwPrijs-staf*M,`Kernteam 6 medewerkers × €30, wij ${staf}`],
-   ["C-team per medewerker",afdM-KT.ctm,`Ons ${staf} × ${eur2(n("bCtm"))} ${fxt2}, kernteam 6 × €17,50 × 1`],
-   ["Bijdrage PT",fx*D*n("bPt")-KT.pt,`Ons ${eur2(n("bPt"))} ${fxt2}, kernteam €1 × 1`],
-   ["Calamiteitenfonds",fx*D*n("bCal")-KT.cal,`Ons ${eur2(n("bCal"))} p.p. ${fxt2}, kernteam 3% (€36, eigenlijk €72 bij 20 deelnemers)`],
+   ["C-team per deelnemer",fx*D*n("bCtd")-KT.ctd,`Ons ${eur2(n("bCtd"))} ${fxt2} × ${D}, kernteam €6,50 × 2 × 20`],
+   ["Extra reservering",res-KT.res,`Vervalt in 2027; staat bij ons op ${n("bRes")}%`],
+   ["Terrein",terr-KT.terr,`Beide alleen deelnemers: ons ${D}, kernteam 20`],
+   ["Bijdrage LSC",fx*D*n("bLsc")-KT.lsc,`Ons ${eur2(n("bLsc"))} ${fxt2} × ${D}, kernteam €4 × 2 × 20`],
+   ["Reiskosten",reis-KT.reis,`Ons ANWB-berekening (1 auto met aanhanger); kernteam €200 maximaal, €100 minimaal`],
+   ["Gas en stookhout",n("bHout")-KT.hout,`Kernteam €50 gas + €214 "Stookhout?" (restpost). Basis-stookhout zit in de C-team-bijdrage; extra hout hangt af van het aantal kuub`],
+   ["Eten en drinken",eten+drank-KT.voed,`Ons PLUS-lijst voor ${eters} eters (ook medewerkers), kernteam €30 × 20 deelnemers`],
+   ["Inkomsten medewerkers",KT.mw*KT.mwPrijs-staf*M,`Maximale begroting kernteam met 6 medewerkers (ruimte voor 2 extra), wij ${staf}`],
+   ["C-team per medewerker",afdM-KT.ctm,`Ons ${staf} × €17,50 ${fxt2}, kernteam 6 × €17,50 × 2`],
+   ["Bijdrage PT",fx*D*n("bPt")-KT.pt,`Ons ${eur2(n("bPt"))} ${fxt2} × ${D}, kernteam €1 × 2 × 20`],
+   ["Calamiteitenfonds",cal-KT.cal,`Beide 3% van het deelnemersgeld (kernteam €72 bij 20 × €120)`],
    ["Inkomsten deelnemers",KT.dln*KT.prijs-D*P,`Kernteam 20 × €120, wij ${D} × ${eur2(P)}`],
    ["Saunahut / materiaal / promotie / speenvarken",(n("bSauna")+n("bKoud")+n("bWork")+promo+pig+over)-(KT.sauna+KT.mat+KT.promo+KT.pig),"Verder gelijk aan het kernteam"]
   ].map(r=>[r[0],cent(r[1]),r[2]]).filter(r=>Math.abs(r[1])>=0.5).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1]));
@@ -1011,27 +1012,26 @@ function calc(){
   const sg=v=>(v>0?"+":v<0?"−":"")+eur2(Math.abs(v));
   $("dfSplit").innerHTML=`<div><span class="label">HIT-afdrachten</span><b style="color:${gA>0?"var(--ember)":"var(--ok)"}">${sg(gA)}</b></div><div><span class="label">Kampkosten</span><b style="color:${gK>0?"var(--ember)":"var(--ok)"}">${sg(gK)}</b></div><div><span class="label">Minder inkomsten</span><b style="color:${gI>0?"var(--ember)":"var(--ok)"}">${sg(gI)}</b></div>`;
   $("dfList").innerHTML=L.map(([t,v,w])=>`<li class="${v>0?"up":"down"}"><span class="t">${t}</span><span class="a">${v>0?"+":"−"}${eur2(Math.abs(v))}</span><span class="w">${w}</span><span class="bar"><i style="width:${Math.max(3,Math.abs(v)/mx*100)}%"></i></span></li>`).join("");
-  $("ktNotes").innerHTML=`<b>Waar de verschillen vandaan komen</b><ul>
-   <li><b>Afdrachten tellen bij het kernteam 1×.</b> In hun formulier staan de overnachtingen op 0; het formulier verdubbelt de afdrachten pas bij 2 of meer nachten. Wij rekenen met ${nacht} nachten, dus ${fx}×. Navragen bij Anouska.</li>
-   <li><b>Andere tarieven:</b> kernteam LSC €4,00 en C-team deelnemers €6,50; wij ${eur2(n("bLsc"))} en ${eur2(n("bCtd"))}. Calamiteitenfonds is bij hen 3% van het deelnemersgeld, bij ons ${eur2(n("bCal"))} per deelnemer. Het kernteam rekent geen 10% reservering.</li>
-   <li><b>Calamiteitenfonds in hun maximale kolom</b> is €36: dat is 3% van de minimale begroting (10 deelnemers). Bij 20 deelnemers zou het €72 zijn; het formulier neemt hier het verkeerde getal over.</li>
-   <li><b>Terrein:</b> het kernteam rekent alleen deelnemers (20 × 3 × €10,25); wij ook medewerkers (${eters} personen).</li>
-   <li><b>Medewerkers:</b> kernteam rekent met 6 medewerkers (6 × €30 inkomsten, 6 × €17,50 afdracht), wij met ${staf}.</li>
-   <li><b>Eten:</b> kernteam €30 per deelnemer, alleen deelnemers; wij de PLUS-boodschappenlijst voor ${eters} eters.</li>
-   <li><b>Stookhout en gas:</b> kernteam €50 gas + €214 stookhout. Die €214 is het bedrag dat over bleef om op 0 uit te komen; er staat "Stookhout?" bij.</li></ul>`;
+  $("ktNotes").innerHTML=`<b>Afgestemd met Anouska op 11 november</b><ul>
+   <li>Haar formulier 2027 is leidend; daarin staan de getallen van Landelijk voor 2027.</li>
+   <li>In haar formulier stonden de overnachtingen op 0, waardoor het alles 1× rekende. Zij bevestigt: <b>× 2</b>, want jullie slapen meer dan 1 nacht. De kernteam-kolom hier is daarop aangepast, net als het calamiteitenfonds (€72 in plaats van €36).</li>
+   <li>Terrein alleen voor deelnemers. Medewerkers betalen €30; daarmee zijn hun terreinkosten verrekend.</li>
+   <li>C-team €6,50 per deelnemer is voorlopig. Het hangt af van het stookhout: <b>Anouska wil weten hoeveel kuub jullie nodig hebben.</b></li>
+   <li>Haar reiskosten: €100 in de minimale, €200 in de maximale begroting.</li>
+   <li>De maximale begroting rekent met 6 medewerkers, zodat er ruimte is om nog iemand toe te voegen. De definitieve begroting volgt na de inschrijving.</li></ul>`;
   // kosten per deelnemer
-  const tpp=n("bTerr")*nacht,afdPP=fx*(n("bCal")+n("bLsc")+n("bPt")+n("bCtd")),bpp=(eten+drank)/eters,ppp=pig/eters;
+  const tpp=n("bTerr")*nacht,afdPP=fx*(n("bLsc")+n("bPt")+n("bCtd"))+cp*sluit,bpp=(eten+drank)/eters,ppp=pig/eters;
   const kVast=tpp+afdPP,kWork=n("bWork")/D,kOver=(n("bSauna")+n("bKoud")+n("bHout")+reis+promo+over)/D;
-  const kMw=(staf*(tpp+bpp+ppp)+afdM-staf*M)/D,kSub=kVast+bpp+ppp+kWork+kOver+kMw,kRes=sluit-kSub;
+  const kMw=(staf*(bpp+ppp)+afdM-staf*M)/D,kSub=kVast+bpp+ppp+kWork+kOver+kMw,kRes=sluit-kSub;
   const Q=(a,b,c)=>`<div class="r${c?" tot":""}"><span>${a}</span><span>${eur2(b)}</span></div>`;
   $("perDln").innerHTML=
-    Q(`Vaste kosten: terrein ${eur2(tpp)} + HIT-afdrachten ${eur2(afdPP)}`,kVast)
+    Q(`Vaste kosten: terrein ${eur2(tpp)} + HIT-afdrachten incl. 3% calamiteitenfonds ${eur2(afdPP)}`,kVast)
    +Q("Boodschappen zonder speenvarken (eten en drinken)",bpp)
    +Q("Speenvarken",ppp)
    +Q("Workshops: keukengereedschap en materiaal",kWork)
    +Q("Overige kampkosten: saunahut, stookhout, vervoer, promotie"+(n("bKoud")?", koudwaterbak":""),kOver)
-   +Q(`Medewerkers: ${staf} × terrein, eten en afdracht, min hun bijdrage, verdeeld`,kMw)
-   +Q(`Reservering ${n("bRes")}%`,kRes)
+   +Q(`Medewerkers: ${staf} × eten en C-team-afdracht, min hun bijdrage, verdeeld`,kMw)
+   +(Math.abs(kRes)>=0.005?Q(`Extra reservering ${n("bRes")}%`,kRes):"")
    +Q("Werkprijs per deelnemer",sluit,1);
   // kop bovenaan
   $("hBez").textContent=`${D} + ${staf} = ${eters} eters`;$("hBez2").textContent=`${D} deelnemers, ${staf} staf`;
@@ -1180,7 +1180,7 @@ renderDays();renderTeam();renderMat();renderBood();calc();renderOpen();route();
 window.__reapply=()=>{
   try{const r=store.getItem(KEY);S={chk:{},own:{},role:{},open:{}};if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
   try{const b=JSON.parse(store.getItem(KEY+"-bood-plus"));if(Array.isArray(b))BOOD=b}catch(e){}
-  try{const sv=JSON.parse(store.getItem(KEY+"-begr")||"{}");if(sv.__nul){NUL=sv.__nul;showNul()}BIN.forEach(id=>{if(sv[id]!==undefined&&document.activeElement!==$(id))$(id).value=sv[id]})}catch(e){}
+  try{const sv=MIG27(JSON.parse(store.getItem(KEY+"-begr")||"{}"));if(sv.__nul){NUL=MIG27(sv.__nul);showNul()}BIN.forEach(id=>{if(sv[id]!==undefined&&document.activeElement!==$(id))$(id).value=sv[id]})}catch(e){}
   try{const m=store.getItem(KEY+"-bmode");if(m)$("bMode").value=ONLINE?JSON.parse(m):m}catch(e){}
   try{const r=store.getItem(KEY+"-pig2");if(r!==null&&PIG.some(p=>p[0]===+JSON.parse(r)))pigG=+JSON.parse(r)}catch(e){}
   if(document.activeElement&&document.activeElement.closest&&document.activeElement.closest("#boodList"))return calc();
