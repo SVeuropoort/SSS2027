@@ -199,6 +199,17 @@ dialog.lb .close{font:inherit;font-weight:700;background:#f1f1ec;color:#1b1b1b;b
 .login input,.login select{font:inherit;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)}
 .login .err{color:var(--ember);font-weight:600}
 
+/* vergelijking kernteam */
+.cmpwrap{overflow-x:auto}
+.cmp{width:100%;border-collapse:collapse;font-size:.92rem;min-width:520px}
+.cmp th,.cmp td{padding:7px 10px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cmp th:first-child,.cmp td:first-child{text-align:left;white-space:normal}
+.cmp thead th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-top:0}
+.cmp tr.sec td{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700;padding-top:14px;text-align:left}
+.cmp tr.tot td{font-weight:700;background:var(--bg)}
+.cmp .up{color:var(--ember)}.cmp .down{color:var(--ok)}
+#ktNotes ul{margin:6px 0 0;padding-left:1.1rem;display:flex;flex-direction:column;gap:4px}
+
 /* boodschappen */
 .bcat{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .bcat-h{display:flex;justify-content:space-between;gap:12px;padding:12px 16px;background:var(--bg);font-weight:700;flex-wrap:wrap}
@@ -572,6 +583,12 @@ footer{padding-block:40px;color:var(--muted);font-size:.85rem}
   </div>
   <div class="stack" id="boodList"></div>
   <div class="ledger" id="ledger"></div>
+  <div class="card" id="ktCard">
+    <span class="label">Naast elkaar: begroting kernteam en onze begroting</span>
+    <p style="color:var(--muted);font-size:.9rem">Kernteam: het financieel formulier HIT 2027 uit je Drive (10 november 2026), kolom maximale begroting: 20 deelnemers, 6 medewerkers, €120. Onze kolom rekent live mee met de bedragen hierboven.</p>
+    <div class="cmpwrap"><table class="cmp" id="ktTable"></table></div>
+    <div class="note" id="ktNotes"></div>
+  </div>
   <p class="note"><b>Tarieven:</b> terrein €10,25 p.p.p.n. en LSC €4,25 zijn gecorrigeerd door Anouska (HIT-organisatie, 9 november 2026). Overige afdrachten, medewerkersbijdrage €30 en 10% reservering komen uit de HIT-begroting 2026. Anouska rekent de begroting nog na op haar template. Bij 2 of meer nachten tellen de afdrachten dubbel, zoals in dat bestand. <b>Nog bevestigen voor 2027</b> bij de penningmeester van HIT Heerenveen. Koudwaterbak is nog niet geprijsd. Geen privébetalingen om een tekort te verbergen; bonnen bewaren.</p>
 </section>
 
@@ -922,6 +939,23 @@ function calc(){
    +R(`Medewerkers ${staf} × ${eur2(M)}`,staf*M)
    +R("Totaal inkomsten",ink,1)
    +R(resu>=0?"Resultaat: overschot":"Resultaat: tekort",resu,1);
+  // vergelijking met de begroting van het kernteam (financieel formulier HIT 2027, max-kolom)
+  const KT={dln:20,mw:6,prijs:120,mwPrijs:30,lsc:80,pt:20,ctm:105,ctd:130,cal:36,res:0,terr:615,voed:600,pig:250,reis:200,promo:80,sauna:100,mat:100,hout:264};
+  const ktInk=KT.dln*KT.prijs+KT.mw*KT.mwPrijs,ktAfd=KT.lsc+KT.pt+KT.ctm+KT.ctd+KT.cal+KT.res,ktVar=KT.terr+KT.voed+KT.pig+KT.reis+KT.promo+KT.sauna+KT.mat+KT.hout,ktKost=ktAfd+ktVar;
+  const C=(t,a,b,cls,inv)=>{const d=cent(b-a),g=inv?-d:d;return `<tr${cls?` class="${cls}"`:""}><td>${t}</td><td>${eur2(a)}</td><td>${eur2(b)}</td><td class="${Math.abs(d)<0.005?"":(g>0?"up":"down")}">${Math.abs(d)<0.005?"–":(d>0?"+":"")+eur2(d)}</td></tr>`},CS=t=>`<tr class="sec"><td colspan="4">${t}</td></tr>`;
+  $("ktTable").innerHTML=`<thead><tr><th>Post</th><th>Kernteam</th><th>Ons</th><th>Verschil</th></tr></thead><tbody>`
+   +CS("Inkomsten")+C(`Deelnemers (kernteam ${KT.dln} × €${KT.prijs}, ons ${D} × ${eur2(P)})`,KT.dln*KT.prijs,D*P,"",1)+C(`Medewerkers (kernteam ${KT.mw}, ons ${staf})`,KT.mw*KT.mwPrijs,staf*M,"",1)+C("Totaal inkomsten",ktInk,ink,"tot",1)
+   +CS("HIT-afdrachten")+C("Bijdrage LSC",KT.lsc,fx*D*n("bLsc"))+C("Bijdrage PT",KT.pt,fx*D*n("bPt"))+C("C-team medewerkers",KT.ctm,afdM)+C("C-team deelnemers",KT.ctd,fx*D*n("bCtd"))+C("Calamiteitenfonds",KT.cal,fx*D*n("bCal"))+C("Reservering onvoorzien",KT.res,res)+C("Totaal afdrachten",ktAfd,afdTot,"tot")
+   +CS("Kampkosten")+C("Terrein",KT.terr,terr)+C("Eten en drinken (zonder speenvarken)",KT.voed,eten+drank)+C("Speenvarken",KT.pig,pig)+C("Reiskosten",KT.reis,reis)+C("Promotie",KT.promo,promo)+C("Saunahut"+(n("bKoud")?" en koudwaterbak":""),KT.sauna,n("bSauna")+n("bKoud"))+C("Overig materiaal / workshops",KT.mat,n("bWork"))+C("Stookhout en gas",KT.hout,n("bHout"))+(over?C("Overige kosten",0,over):"")+C("Totaal kampkosten",ktVar,bood+kamp+terr,"tot")
+   +C("Totaal kosten",ktKost,kosten,"tot")+C("Resultaat",cent(ktInk-ktKost),resu,"tot",1)+`</tbody>`;
+  $("ktNotes").innerHTML=`<b>Waar de verschillen vandaan komen</b><ul>
+   <li><b>Afdrachten tellen bij het kernteam 1×.</b> In hun formulier staan de overnachtingen op 0; het formulier verdubbelt de afdrachten pas bij 2 of meer nachten. Wij rekenen met ${nacht} nachten, dus ${fx}×. Navragen bij Anouska.</li>
+   <li><b>Andere tarieven:</b> kernteam LSC €4,00 en C-team deelnemers €6,50; wij ${eur2(n("bLsc"))} en ${eur2(n("bCtd"))}. Calamiteitenfonds is bij hen 3% van het deelnemersgeld, bij ons ${eur2(n("bCal"))} per deelnemer. Het kernteam rekent geen 10% reservering.</li>
+   <li><b>Calamiteitenfonds in hun maximale kolom</b> is €36: dat is 3% van de minimale begroting (10 deelnemers). Bij 20 deelnemers zou het €72 zijn; het formulier neemt hier het verkeerde getal over.</li>
+   <li><b>Terrein:</b> het kernteam rekent alleen deelnemers (20 × 3 × €10,25); wij ook medewerkers (${eters} personen).</li>
+   <li><b>Medewerkers:</b> kernteam rekent met 6 medewerkers (6 × €30 inkomsten, 6 × €17,50 afdracht), wij met ${staf}.</li>
+   <li><b>Eten:</b> kernteam €30 per deelnemer, alleen deelnemers; wij de PLUS-boodschappenlijst voor ${eters} eters.</li>
+   <li><b>Stookhout en gas:</b> kernteam €50 gas + €214 stookhout. Die €214 is het bedrag dat over bleef om op 0 uit te komen; er staat "Stookhout?" bij.</li></ul>`;
   // kosten per deelnemer
   const tpp=n("bTerr")*nacht,afdPP=fx*(n("bCal")+n("bLsc")+n("bPt")+n("bCtd")),bpp=(eten+drank)/eters,ppp=pig/eters;
   const kVast=tpp+afdPP,kWork=n("bWork")/D,kOver=(n("bSauna")+n("bKoud")+n("bHout")+reis+promo+over)/D;
