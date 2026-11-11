@@ -199,6 +199,32 @@ dialog.lb .close{font:inherit;font-weight:700;background:#f1f1ec;color:#1b1b1b;b
 .login input,.login select{font:inherit;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--ink)}
 .login .err{color:var(--ember);font-weight:600}
 
+/* grote verschillen */
+.diffbox{border:2px solid var(--ember);border-radius:12px;background:var(--surface);padding:18px;display:flex;flex-direction:column;gap:14px}
+.diffhead{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-end}
+.diffhead h3{font-size:1.5rem}
+.dfbig{text-align:right}
+.dfbig span{display:block;font-family:var(--display);font-size:2.4rem;line-height:1;color:var(--ember);font-variant-numeric:tabular-nums}
+.dfbig small{color:var(--muted);font-size:.85rem}
+.dfsplit{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.dfsplit div{background:var(--bg);border-radius:8px;padding:10px 12px;min-width:0}
+.dfsplit b{display:block;font-family:var(--mono);font-size:1.25rem;font-variant-numeric:tabular-nums}
+.dflist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px;counter-reset:df}
+.dflist li{display:grid;grid-template-columns:2.2rem minmax(0,1fr) auto;gap:4px 12px;align-items:start;counter-increment:df}
+.dflist li::before{content:counter(df);font-family:var(--display);font-size:1.4rem;color:var(--muted);line-height:1.2}
+.dflist .t{font-weight:700}
+.dflist .w{font-size:.88rem;color:var(--muted);grid-column:2}
+.dflist .a{font-family:var(--mono);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dflist .bar{grid-column:2/4;height:10px;background:var(--line);border-radius:999px;overflow:hidden}
+.dflist .bar i{display:block;height:100%;border-radius:999px}
+.dflist .up .a{color:var(--ember)}.dflist .up .bar i{background:var(--ember)}
+.dflist .down .a{color:var(--ok)}.dflist .down .bar i{background:var(--ok)}
+.dffoot{color:var(--muted);font-size:.85rem}
+
+.diffteaser{display:flex;flex-direction:column;gap:2px;border:2px solid var(--ember);border-radius:10px;padding:12px 16px;background:var(--ember-soft);color:var(--ink);text-decoration:none}
+.diffteaser b{font-size:1.1rem}
+.diffteaser span:last-child{color:var(--ember);font-weight:700;font-size:.9rem}
+
 /* vergelijking kernteam */
 .cmpwrap{overflow-x:auto}
 .cmp{width:100%;border-collapse:collapse;font-size:.92rem;min-width:520px}
@@ -287,6 +313,7 @@ footer{padding-block:40px;color:var(--muted);font-size:.85rem}
 <main class="wrap">
 
 <section id="overzicht" class="stack">
+  <a class="diffteaser" href="#begroting"><span class="label">Begroting</span><b id="dfTeaser">Verschil met de begroting van het kernteam</b><span>Bekijk waar het verschil zit →</span></a>
   <p class="quote">Luxe maak je samen. Met vuur, een goede stoofpot en nog beter gezelschap.</p>
   <p class="lede">Een luxe buitenweekend voor volwassen scouts: zelf vuur maken, werken met hout en gietijzer, een gevuld speenvarken aan het spit draaien en stoofpotten rustig laten pruttelen. De luxe zit in goed eten, warmte, aandacht en tijd voor elkaar. Er blijft bewust ruimte om te ontspannen.</p>
   <div class="pillars">
@@ -526,6 +553,15 @@ footer{padding-block:40px;color:var(--muted);font-size:.85rem}
 
 <section id="begroting" class="stack" hidden>
   <div><h2>Begroting</h2><p class="lede">Rekenhulp met als nulpunt de begroting van <span id="nulDatum">10 november 2026</span>. Elk bedrag hieronder is aan te passen; alles rekent direct door, ook de kop bovenaan. Onder de specificatie staat de begroting van het kernteam ernaast.</p></div>
+  <div class="diffbox" id="diffBox">
+    <div class="diffhead">
+      <div><span class="label">Kernteam (Anouska) tegenover ons</span><h3 id="dfTitle">Waar zit het verschil?</h3></div>
+      <div class="dfbig"><span id="dfTotal">€0</span><small>verschil in resultaat</small></div>
+    </div>
+    <div class="dfsplit" id="dfSplit"></div>
+    <ol class="dflist" id="dfList"></ol>
+    <p class="dffoot">Rood: bij ons duurder of minder inkomsten. Groen: bij ons goedkoper. Volledige vergelijking onderaan deze pagina. Kernteam = financieel formulier HIT 2027 van 10 november, maximale begroting.</p>
+  </div>
   <div class="calcgroup"><span class="label">Bezetting en prijs</span><div class="calc">
     <label for="bDeel">Deelnemers<input type="number" id="bDeel" min="1" max="60" value="20"></label>
     <label for="bMw">Medewerkers<input type="number" id="bMw" min="0" max="20" value="4"></label>
@@ -951,6 +987,30 @@ function calc(){
    +CS("HIT-afdrachten")+C("Bijdrage LSC",KT.lsc,fx*D*n("bLsc"))+C("Bijdrage PT",KT.pt,fx*D*n("bPt"))+C("C-team medewerkers",KT.ctm,afdM)+C("C-team deelnemers",KT.ctd,fx*D*n("bCtd"))+C("Calamiteitenfonds",KT.cal,fx*D*n("bCal"))+C("Reservering onvoorzien",KT.res,res)+C("Totaal afdrachten",ktAfd,afdTot,"tot")
    +CS("Kampkosten")+C("Terrein",KT.terr,terr)+C("Eten en drinken (zonder speenvarken)",KT.voed,eten+drank)+C("Speenvarken",KT.pig,pig)+C("Reiskosten",KT.reis,reis)+C("Promotie",KT.promo,promo)+C("Saunahut"+(n("bKoud")?" en koudwaterbak":""),KT.sauna,n("bSauna")+n("bKoud"))+C("Overig materiaal / workshops",KT.mat,n("bWork"))+C("Stookhout en gas",KT.hout,n("bHout"))+(over?C("Overige kosten",0,over):"")+C("Totaal kampkosten",ktVar,bood+kamp+terr,"tot")
    +C("Totaal kosten",ktKost,kosten,"tot")+C("Resultaat",cent(ktInk-ktKost),resu,"tot",1)+`</tbody>`;
+  // grote verschillen, gesorteerd op grootte (positief = slechter voor ons resultaat)
+  const fxt2=fx===2?"× 2":"× 1",L=[
+   ["C-team per deelnemer",fx*D*n("bCtd")-KT.ctd,`Ons ${eur2(n("bCtd"))} ${fxt2} × ${D}, kernteam €6,50 × 1 × 20`],
+   ["Reservering onvoorzien",res-KT.res,`Wij rekenen ${n("bRes")}% reservering, het kernteam niets`],
+   ["Terrein",terr-KT.terr,`Wij rekenen ook ${staf} medewerkers mee (${eters} personen), het kernteam alleen 20 deelnemers`],
+   ["Bijdrage LSC",fx*D*n("bLsc")-KT.lsc,`Ons ${eur2(n("bLsc"))} ${fxt2}, kernteam €4,00 × 1`],
+   ["Reiskosten",reis-KT.reis,`Ons berekend met de ANWB (1 auto met aanhanger), kernteam schatting €200`],
+   ["Stookhout en gas",n("bHout")-KT.hout,`Kernteam €50 gas + €214 "Stookhout?" (restpost om op €0 uit te komen)`],
+   ["Eten en drinken",eten+drank-KT.voed,`Ons PLUS-lijst voor ${eters} eters, kernteam €30 × 20 deelnemers`],
+   ["Inkomsten medewerkers",KT.mw*KT.mwPrijs-staf*M,`Kernteam 6 medewerkers × €30, wij ${staf}`],
+   ["C-team per medewerker",afdM-KT.ctm,`Ons ${staf} × ${eur2(n("bCtm"))} ${fxt2}, kernteam 6 × €17,50 × 1`],
+   ["Bijdrage PT",fx*D*n("bPt")-KT.pt,`Ons ${eur2(n("bPt"))} ${fxt2}, kernteam €1 × 1`],
+   ["Calamiteitenfonds",fx*D*n("bCal")-KT.cal,`Ons ${eur2(n("bCal"))} p.p. ${fxt2}, kernteam 3% (€36, eigenlijk €72 bij 20 deelnemers)`],
+   ["Inkomsten deelnemers",KT.dln*KT.prijs-D*P,`Kernteam 20 × €120, wij ${D} × ${eur2(P)}`],
+   ["Saunahut / materiaal / promotie / speenvarken",(n("bSauna")+n("bKoud")+n("bWork")+promo+pig+over)-(KT.sauna+KT.mat+KT.promo+KT.pig),"Verder gelijk aan het kernteam"]
+  ].map(r=>[r[0],cent(r[1]),r[2]]).filter(r=>Math.abs(r[1])>=0.5).sort((a,b)=>Math.abs(b[1])-Math.abs(a[1]));
+  const mx=Math.max(1,...L.map(r=>Math.abs(r[1]))),tot=cent((ktInk-ktKost)-resu);
+  $("dfTotal").textContent=(tot>0?"−":tot<0?"+":"")+eur2(Math.abs(tot));
+  $("dfTeaser").textContent=tot>0?`Wij komen ${eur2(tot)} slechter uit dan de begroting van het kernteam (Anouska)`:`Verschil met de begroting van het kernteam: ${eur2(-tot)} in ons voordeel`;
+  $("dfTitle").textContent=tot>0?`Wij komen ${eur2(tot)} slechter uit dan het kernteam`:tot<0?`Wij komen ${eur2(-tot)} beter uit dan het kernteam`:"Geen verschil met het kernteam";
+  const gA=cent(afdTot-ktAfd),gK=cent((bood+kamp+terr)-ktVar),gI=cent(ktInk-ink);
+  const sg=v=>(v>0?"+":v<0?"−":"")+eur2(Math.abs(v));
+  $("dfSplit").innerHTML=`<div><span class="label">HIT-afdrachten</span><b style="color:${gA>0?"var(--ember)":"var(--ok)"}">${sg(gA)}</b></div><div><span class="label">Kampkosten</span><b style="color:${gK>0?"var(--ember)":"var(--ok)"}">${sg(gK)}</b></div><div><span class="label">Minder inkomsten</span><b style="color:${gI>0?"var(--ember)":"var(--ok)"}">${sg(gI)}</b></div>`;
+  $("dfList").innerHTML=L.map(([t,v,w])=>`<li class="${v>0?"up":"down"}"><span class="t">${t}</span><span class="a">${v>0?"+":"−"}${eur2(Math.abs(v))}</span><span class="w">${w}</span><span class="bar"><i style="width:${Math.max(3,Math.abs(v)/mx*100)}%"></i></span></li>`).join("");
   $("ktNotes").innerHTML=`<b>Waar de verschillen vandaan komen</b><ul>
    <li><b>Afdrachten tellen bij het kernteam 1×.</b> In hun formulier staan de overnachtingen op 0; het formulier verdubbelt de afdrachten pas bij 2 of meer nachten. Wij rekenen met ${nacht} nachten, dus ${fx}×. Navragen bij Anouska.</li>
    <li><b>Andere tarieven:</b> kernteam LSC €4,00 en C-team deelnemers €6,50; wij ${eur2(n("bLsc"))} en ${eur2(n("bCtd"))}. Calamiteitenfonds is bij hen 3% van het deelnemersgeld, bij ons ${eur2(n("bCal"))} per deelnemer. Het kernteam rekent geen 10% reservering.</li>
